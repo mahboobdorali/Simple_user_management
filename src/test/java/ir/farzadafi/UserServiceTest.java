@@ -19,11 +19,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -75,5 +76,14 @@ public class UserServiceTest {
         assertEquals(user.getPassword(), actual.getPassword());
         assertEquals(user.getBirthdate(), actual.getBirthdate());
         assertEquals(user.getCreatedIn(), actual.getCreatedIn());
+    }
+
+    @Test
+    void itShouldGetUserByNationalCOde() {
+        given(userRepository.findByNationalCode("4610735131"))
+                .willReturn(Optional.ofNullable(user));
+        User actual = underTest.findByNationalCode("4610735131");
+        assertNotNull(actual);
+        assertEquals(user.getNationalCode(), actual.getNationalCode());
     }
 }
